@@ -123,7 +123,7 @@ export const resolveValues = (
 interface CustomMenuProps extends MenuProps<any> {}
 
 const CustomMenu: React.FC<CustomMenuProps> = p => {
-    const { Menu } = components;
+    const Menu = components.Menu as React.ComponentType<CustomMenuProps>;
     const { children, ...rest } = p;
     return <Menu {...rest}>{children}</Menu>;
 };
@@ -162,12 +162,11 @@ const SelectableMultiValueLabel: React.FC<MultiValueGenericProps<SelectOption>> 
         },
     };
 
-    return (
-        <components.MultiValueLabel
-            {...props}
-            innerProps={enhancedInnerProps as typeof props.innerProps}
-        />
-    );
+    const MultiValueLabel = components.MultiValueLabel as React.ComponentType<
+        MultiValueGenericProps<SelectOption> & { innerProps?: typeof props.innerProps }
+    >;
+
+    return <MultiValueLabel {...props} innerProps={enhancedInnerProps as typeof props.innerProps} />;
 };
 
 export type MultiSelectCell = CustomCell<MultiSelectCellProps>;
@@ -200,7 +199,7 @@ const Editor: ReturnType<ProvideEditorCallback<MultiSelectCell>> = p => {
 
     // Apply styles to the react-select component.
     // All components: https://react-select.com/components
-    const colorStyles: StylesConfig<SelectOption, true> = {
+    const colorStyles = {
         control: (base, state) => ({
             ...base,
             border: 0,
@@ -328,7 +327,7 @@ const Editor: ReturnType<ProvideEditorCallback<MultiSelectCell>> = p => {
                 },
             };
         },
-    };
+    } as StylesConfig<SelectOption, true>;
 
     // This is used to submit the values to the grid.
     const submitValues = React.useCallback(

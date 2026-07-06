@@ -10,7 +10,7 @@ export function useEventListener<K extends keyof HTMLElementEventMap>(
     capture = false
 ) {
     // Create a ref that stores handler
-    const savedHandler = React.useRef<(this: HTMLElement, ev: HTMLElementEventMap[K]) => any>();
+    const savedHandler = React.useRef<((this: HTMLElement, ev: HTMLElementEventMap[K]) => any) | undefined>(undefined);
 
     // Update ref.current value if handler changes.
     // This allows our effect below to always get latest handler ...
@@ -136,8 +136,11 @@ export function useDebouncedMemo<T>(factory: () => T, deps: React.DependencyList
 
     const mountedRef = React.useRef(true);
     React.useEffect(
-        () => () => {
-            mountedRef.current = false;
+        () => {
+            mountedRef.current = true;
+            return () => {
+                mountedRef.current = false;
+            };
         },
         []
     );

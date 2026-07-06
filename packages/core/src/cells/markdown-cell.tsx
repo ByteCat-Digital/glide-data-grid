@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+ 
 import * as React from "react";
 import { MarkdownOverlayEditor } from "../internal/data-grid-overlay-editor/private/markdown-overlay-editor.js";
 import { drawTextCell, prepTextCell } from "../internal/data-grid/render/data-grid-lib.js";

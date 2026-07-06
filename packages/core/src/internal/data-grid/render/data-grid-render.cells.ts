@@ -1,5 +1,5 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-/* eslint-disable unicorn/no-for-loop */
+ 
+ 
 import {
     type GridSelection,
     type InnerGridCell,

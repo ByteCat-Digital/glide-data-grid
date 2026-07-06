@@ -1,5 +1,5 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-/* eslint-disable unicorn/no-for-loop */
+ 
+ 
 import { type Rectangle } from "../data-grid-types.js";
 import { CellSet } from "../cell-set.js";
 import { getEffectiveColumns, type MappedGridColumn, rectBottomRight } from "./data-grid-lib.js";

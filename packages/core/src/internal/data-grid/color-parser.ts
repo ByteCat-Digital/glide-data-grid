@@ -37,7 +37,7 @@ export function parseToRgba(color: string): readonly [number, number, number, nu
     if (computedColor !== control) return [0, 0, 0, 1];
 
     let result = computedColor
-        // eslint-disable-next-line unicorn/better-regex
+         
         .replace(/[^\d.,]/g, "")
         .split(",")
         .map(Number.parseFloat) as [number, number, number, number];
@@ -130,7 +130,7 @@ export function interpolateColors(leftColor: string, rightColor: string, val: nu
 export function getLuminance(color: string): number {
     if (color === "transparent") return 0;
 
-    // eslint-disable-next-line unicorn/consistent-function-scoping
+     
     function f(x: number) {
         const channel = x / 255;
         return channel <= 0.040_45 ? channel / 12.92 : Math.pow((channel + 0.055) / 1.055, 2.4);

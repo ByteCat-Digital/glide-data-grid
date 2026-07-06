@@ -19,7 +19,7 @@ import { faker } from "@faker-js/faker";
 faker.seed(1337);
 
 function isTruthy(x: any): boolean {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+     
     return x ? true : false;
 }
 
@@ -123,7 +123,7 @@ function getResizableColumns(amount: number, group: boolean): GridColumnWithMock
             icon: GridColumnIcon.HeaderString,
             hasMenu: false,
             getContent: () => {
-                const firstName = faker.name.firstName();
+                const firstName = faker.person.firstName();
                 return {
                     kind: GridCellKind.Text,
                     displayData: firstName,
@@ -140,7 +140,7 @@ function getResizableColumns(amount: number, group: boolean): GridColumnWithMock
             icon: GridColumnIcon.HeaderString,
             hasMenu: false,
             getContent: () => {
-                const lastName = faker.name.lastName();
+                const lastName = faker.person.lastName();
                 return {
                     kind: GridCellKind.Text,
                     displayData: lastName,
@@ -191,7 +191,7 @@ function getResizableColumns(amount: number, group: boolean): GridColumnWithMock
             icon: GridColumnIcon.HeaderString,
             hasMenu: false,
             getContent: () => {
-                const company = faker.name.jobTitle();
+                const company = faker.person.jobTitle();
                 return {
                     kind: GridCellKind.Text,
                     displayData: company,

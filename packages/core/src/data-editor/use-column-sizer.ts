@@ -114,7 +114,7 @@ export function useColumnSizer(
 
     const memoMap = React.useRef<Record<string, number>>({});
 
-    const lastColumns = React.useRef<typeof columns>();
+    const lastColumns = React.useRef<typeof columns | undefined>(undefined);
     const [selectedData, setSelectionData] = React.useState<CellArray | undefined>();
 
     React.useLayoutEffect(() => {
@@ -144,14 +144,14 @@ export function useColumnSizer(
             const getResult = getCells(computeArea, abortController.signal);
             const tailGetResult = tailRows > 0 ? getCells(tailComputeArea, abortController.signal) : undefined;
             let toSet: CellArray;
-            // eslint-disable-next-line unicorn/prefer-ternary
+             
             if (typeof getResult === "object") {
                 toSet = getResult;
             } else {
                 toSet = await resolveCellsThunk(getResult);
             }
             if (tailGetResult !== undefined) {
-                // eslint-disable-next-line unicorn/prefer-ternary
+                 
                 if (typeof tailGetResult === "object") {
                     toSet = [...toSet, ...tailGetResult];
                 } else {

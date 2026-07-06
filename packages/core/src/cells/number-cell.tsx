@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+ 
 import * as React from "react";
 import { drawTextCell, prepTextCell } from "../internal/data-grid/render/data-grid-lib.js";
 import { GridCellKind, type NumberCell } from "../internal/data-grid/data-grid-types.js";

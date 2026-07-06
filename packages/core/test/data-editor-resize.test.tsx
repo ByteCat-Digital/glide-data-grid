@@ -6,13 +6,13 @@ import type { DataEditorRef } from "../src/data-editor/data-editor.js";
 import { vi, expect, describe, test, beforeEach, afterEach } from "vitest";
 import { EventedDataEditor, basicProps, prep, Context, standardBeforeEach, standardAfterEach } from "./test-utils.js";
 
-describe("data-editor", () => {
-    vi.mock("../src/common/resize-detector", () => {
-        return {
-            useResizeDetector: () => ({ ref: undefined, width: 1000, height: 1000 }),
-        };
-    });
+vi.mock("../src/common/resize-detector", () => {
+    return {
+        useResizeDetector: () => ({ ref: undefined, width: 1000, height: 1000 }),
+    };
+});
 
+describe("data-editor", () => {
     beforeEach(() => {
         standardBeforeEach();
     });

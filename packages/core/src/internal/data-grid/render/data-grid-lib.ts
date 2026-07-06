@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/no-for-loop */
+ 
 import type { FullTheme } from "../../../common/styles.js";
 import {
     type Item,

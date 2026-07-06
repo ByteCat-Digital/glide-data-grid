@@ -22,7 +22,7 @@ class ImageWindowLoaderImpl extends WindowingTrackerBase implements ImageWindowL
         this.imageLoaded = imageLoaded;
     }
 
-    // eslint-disable-next-line unicorn/consistent-function-scoping
+     
     private sendLoaded = throttle(() => {
         this.imageLoaded(new CellSet(this.loadedLocations));
         this.loadedLocations = [];

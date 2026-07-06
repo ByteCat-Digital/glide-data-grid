@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+ 
 import * as React from "react";
 import BubblesOverlayEditor from "../internal/data-grid-overlay-editor/private/bubbles-overlay-editor.js";
 import { getMiddleCenterBias, measureTextCached, roundedRect } from "../internal/data-grid/render/data-grid-lib.js";

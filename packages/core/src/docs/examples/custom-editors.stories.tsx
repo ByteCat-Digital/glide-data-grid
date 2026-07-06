@@ -64,13 +64,13 @@ CustomEditor.displayName = "CustomEditor";
 const provideEditor: ProvideEditorCallback<TextCell> = cell => {
     // You can get the location of the activated cell via cell.location:
     if (cell.location?.[0] === 0) {
-        // eslint-disable-next-line react/display-name
+         
         return p => <CustomEditor {...p} />;
     }
     return undefined;
 };
 
-export const CustomEditors: React.VFC = () => {
+export const CustomEditors: React.FC = () => {
     const { cols, getCellContent, setCellValue } = useMockDataGenerator(10, false);
 
     return (

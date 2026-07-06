@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+ 
 import * as React from "react";
 import UriOverlayEditor from "../internal/data-grid-overlay-editor/private/uri-overlay-editor.js";
 import {

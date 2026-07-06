@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+ 
 import * as React from "react";
 import { ImageOverlayEditor } from "../internal/data-grid-overlay-editor/private/image-overlay-editor.js";
 import { roundedRect } from "../internal/data-grid/render/data-grid-lib.js";
@@ -78,7 +78,7 @@ export function drawImage(
     const imgHeight = h - theme.cellVerticalPadding * 2;
     const images: (HTMLImageElement | ImageBitmap)[] = [];
     let totalWidth = 0;
-    // eslint-disable-next-line unicorn/no-for-loop
+     
     for (let index = 0; index < data.length; index++) {
         const i = data[index];
         if (i.length === 0) continue;

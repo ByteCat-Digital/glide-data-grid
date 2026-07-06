@@ -1,4 +1,4 @@
-/* eslint-disable sonarjs/no-identical-functions */
+ 
 import * as React from "react";
 
 import { BuilderThemeWrapper } from "../../stories/story-utils.js";

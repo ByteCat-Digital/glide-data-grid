@@ -1,4 +1,4 @@
-/* eslint-disable sonarjs/no-identical-functions */
+ 
 import * as React from "react";
 
 import {
@@ -14,7 +14,6 @@ import {
 import { faker } from "@faker-js/faker";
 import { styled } from "@linaria/react";
 import isArray from "lodash/isArray.js";
-import { assertNever } from "../../common/support.js";
 import { browserIsFirefox } from "../../common/browser-detect.js";
 import { useResizeDetector } from "react-resize-detector";
 import type { DataEditorProps } from "../data-editor.js";
@@ -292,7 +291,7 @@ function getResizableColumns(amount: number, group: boolean): GridColumnWithMock
             icon: GridColumnIcon.HeaderString,
             hasMenu: false,
             getContent: () => {
-                const firstName = faker.name.firstName();
+                const firstName = faker.person.firstName();
                 return {
                     kind: GridCellKind.Text,
                     displayData: firstName,
@@ -309,7 +308,7 @@ function getResizableColumns(amount: number, group: boolean): GridColumnWithMock
             icon: GridColumnIcon.HeaderString,
             hasMenu: false,
             getContent: () => {
-                const lastName = faker.name.lastName();
+                const lastName = faker.person.lastName();
                 return {
                     kind: GridCellKind.Text,
                     displayData: lastName,
@@ -360,7 +359,7 @@ function getResizableColumns(amount: number, group: boolean): GridColumnWithMock
             icon: GridColumnIcon.HeaderString,
             hasMenu: false,
             getContent: () => {
-                const company = faker.name.jobTitle();
+                const company = faker.person.jobTitle();
                 return {
                     kind: GridCellKind.Text,
                     displayData: company,
@@ -400,7 +399,7 @@ function getResizableColumns(amount: number, group: boolean): GridColumnWithMock
 
     const extraColumnsAmount = amount - defaultColumns.length;
 
-    // eslint-disable-next-line unicorn/no-new-array
+     
     const extraColumns = [...new Array(extraColumnsAmount)].map((_, index) =>
         createTextColumnInfo(index + defaultColumns.length, group)
     );
@@ -573,7 +572,7 @@ function getColumnsForCellTypes(): GridColumnWithMockingInfo[] {
             getContent: () => {
                 return {
                     kind: GridCellKind.RowID,
-                    data: faker.datatype.uuid(),
+                    data: faker.string.uuid(),
                     allowOverlay: true,
                 };
             },
@@ -611,7 +610,7 @@ function getColumnsForCellTypes(): GridColumnWithMockingInfo[] {
             icon: GridColumnIcon.HeaderCode,
             hasMenu: false,
             getContent: () => {
-                const name = faker.name.firstName();
+                const name = faker.person.firstName();
                 return {
                     kind: GridCellKind.Text,
                     data: name,
@@ -635,7 +634,7 @@ function getColumnsForCellTypes(): GridColumnWithMockingInfo[] {
             icon: GridColumnIcon.HeaderNumber,
             hasMenu: false,
             getContent: () => {
-                const age = faker.datatype.number(100);
+                const age = faker.number.int(100);
                 return {
                     kind: GridCellKind.Number,
                     data: age,
@@ -678,7 +677,7 @@ function getColumnsForCellTypes(): GridColumnWithMockingInfo[] {
             getContent: () => {
                 return {
                     kind: GridCellKind.Image,
-                    data: [`${faker.image.animals(40, 40)}?random=${faker.datatype.number(100_000)}`],
+                    data: [faker.image.urlPicsumPhotos({ width: 40, height: 40 })],
                     allowOverlay: true,
                     readonly: true,
                 };
@@ -709,7 +708,7 @@ function getColumnsForCellTypes(): GridColumnWithMockingInfo[] {
             hasMenu: false,
             getContent: () => {
                 const markdown = `# Title
-Hello my name is *${faker.name.firstName()}*
+Hello my name is *${faker.person.firstName()}*
 
 ## TODO:
 Try out [Glide](https://www.glideapps.com/)
@@ -751,12 +750,12 @@ Try out [Glide](https://www.glideapps.com/)
                     kind: GridCellKind.Drilldown,
                     data: [
                         {
-                            text: faker.address.cityName(),
-                            img: `${faker.image.nature(40, 40)}?random=${faker.datatype.number(100_000)}`,
+                            text: faker.location.city(),
+                            img: faker.image.urlPicsumPhotos({ width: 40, height: 40 }),
                         },
                         {
-                            text: faker.address.cityName(),
-                            img: `${faker.image.nature(40, 40)}?random=${faker.datatype.number(100_000)}`,
+                            text: faker.location.city(),
+                            img: faker.image.urlPicsumPhotos({ width: 40, height: 40 }),
                         },
                     ],
                     allowOverlay: true,

@@ -25,7 +25,7 @@ const RenameInput = styled.input<{ targetHeight: number }>`
     font: var(--gdg-header-font-style) var(--gdg-font-family);
 `;
 
-export const GroupRename: React.VFC<Props> = p => {
+export const GroupRename: React.FC<Props> = p => {
     const { bounds, group, onClose, canvasBounds, onFinish } = p;
 
     const [value, setValue] = React.useState(group);
@@ -45,7 +45,8 @@ export const GroupRename: React.VFC<Props> = p => {
                 align-items: center;
                 background-color: var(--gdg-bg-header);
             `}
-            onClickOutside={onClose}>
+            onClickOutside={onClose}
+        >
             <RenameInput
                 targetHeight={bounds.height}
                 data-testid="group-rename-input"

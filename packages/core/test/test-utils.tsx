@@ -193,6 +193,7 @@ export const basicProps: DataEditorProps = {
     getCellsForSelection: true,
     groupHeaderHeight: 32,
     headerHeight: 36,
+    initialSize: [1000, 1000],
     rowHeight: 32,
     onRowAppended: () => undefined,
     trailingRowOptions: {
@@ -225,13 +226,16 @@ export function prep(resetTimers: boolean = true) {
     }
 
     act(() => {
-        vi.runAllTimers();
+        vi.advanceTimersByTime(0);
+    });
+    act(() => {
+        vi.advanceTimersByTime(200);
     });
     if (resetTimers) {
         vi.useRealTimers();
     } else {
         act(() => {
-            vi.runAllTimers();
+            vi.advanceTimersByTime(200);
         });
     }
 

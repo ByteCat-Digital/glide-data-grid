@@ -172,7 +172,7 @@ export function copyToClipboard(
 ) {
     const copyBuffer = getCopyBufferContents(cells, columnIndexes);
 
-    // eslint-disable-next-line unicorn/consistent-function-scoping
+     
     const copyWithWriteText = (s: string) => {
         void window.navigator.clipboard?.writeText(s);
     };
@@ -181,7 +181,7 @@ export function copyToClipboard(
         if (window.navigator.clipboard?.write === undefined) return false;
         void window.navigator.clipboard.write([
             new ClipboardItem({
-                // eslint-disable-next-line sonarjs/no-duplicate-string
+                 
                 "text/plain": new Blob([s], { type: "text/plain" }),
                 "text/html": new Blob([html], {
                     type: "text/html",

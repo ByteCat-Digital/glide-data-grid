@@ -1,5 +1,5 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-/* eslint-disable unicorn/no-for-loop */
+ 
+ 
 import { type Rectangle, CompactSelection } from "../data-grid-types.js";
 import { CellSet } from "../cell-set.js";
 import groupBy from "lodash/groupBy.js";

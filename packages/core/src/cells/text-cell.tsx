@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+ 
 import * as React from "react";
 import { GrowingEntry } from "../internal/growing-entry/growing-entry.js";
 import { drawTextCell, prepTextCell } from "../internal/data-grid/render/data-grid-lib.js";

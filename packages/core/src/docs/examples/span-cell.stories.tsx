@@ -1,4 +1,4 @@
-/* eslint-disable sonarjs/no-duplicate-string */
+ 
 import React from "react";
 import { DataEditorAll as DataEditor } from "../../data-editor-all.js";
 import {
@@ -39,7 +39,7 @@ export default {
     ],
 };
 
-export const SpanCell: React.VFC = () => {
+export const SpanCell: React.FC = () => {
     const { cols, getCellContent } = useMockDataGenerator(100, true, true);
 
     const mangledGetCellContent = React.useCallback<typeof getCellContent>(

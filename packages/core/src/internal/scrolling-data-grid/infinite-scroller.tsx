@@ -1,6 +1,7 @@
 import { styled } from "@linaria/react";
 import type { Rectangle } from "../../index.js";
 import * as React from "react";
+import { flushSync } from "react-dom";
 import { useResizeDetector } from "../../common/resize-detector.js";
 import { browserIsSafari } from "../../common/browser-detect.js";
 import { useEventListener } from "../../common/utils.js";
@@ -158,7 +159,7 @@ export const InfiniteScroller: React.FC<Props> = p => {
     const lastScrollY = React.useRef(0);
     const scroller = React.useRef<HTMLDivElement | null>(null);
 
-    const dpr = typeof window === "undefined" ? 1 : window.devicePixelRatio;
+    const dpr = typeof window === "undefined" ? 1 : (window.devicePixelRatio ?? 1);
     const lastDpr = React.useRef(dpr);
 
     // Reset scroll tracking when device pixel ratio changes (e.g., browser zoom)
@@ -200,8 +201,8 @@ export const InfiniteScroller: React.FC<Props> = p => {
     }, [hasTouches, isIdle]);
 
     const onScroll = React.useCallback(
-        (scrollLeft?: number, scrollTop?: number) => {
-            const el = scroller.current;
+        (scrollLeft?: number, scrollTop?: number, scrollElement?: HTMLDivElement) => {
+            const el = scrollElement ?? scroller.current;
             if (el === null) return;
 
             scrollTop = scrollTop ?? el.scrollTop;
@@ -290,7 +291,25 @@ export const InfiniteScroller: React.FC<Props> = p => {
     const onScrollRef = React.useRef(onScroll);
     onScrollRef.current = onScroll;
 
-    const lastProps = React.useRef<{ width?: number; height?: number }>();
+    const initialScrollUpdateTimer = React.useRef<number | undefined>(undefined);
+    const clearInitialScrollUpdate = React.useCallback(() => {
+        if (initialScrollUpdateTimer.current !== undefined) {
+            window.clearTimeout(initialScrollUpdateTimer.current);
+            initialScrollUpdateTimer.current = undefined;
+        }
+    }, []);
+    const scheduleInitialScrollUpdate = React.useCallback((scrollElement: HTMLDivElement) => {
+        if (typeof window === "undefined") return;
+        clearInitialScrollUpdate();
+        initialScrollUpdateTimer.current = window.setTimeout(() => {
+            initialScrollUpdateTimer.current = undefined;
+            if (scrollElement.isConnected) {
+                flushSync(() => onScrollRef.current(undefined, undefined, scrollElement));
+            }
+        }, 0);
+    }, [clearInitialScrollUpdate]);
+
+    const lastProps = React.useRef<{ width?: number; height?: number } | undefined>(undefined);
 
     const didFirstScroll = React.useRef(false);
     // if this is not a layout effect there will be a flicker when changing the number of freezeColumns
@@ -306,8 +325,11 @@ export const InfiniteScroller: React.FC<Props> = p => {
             if (scrollRef !== undefined) {
                 scrollRef.current = instance;
             }
+            if (instance !== null) {
+                scheduleInitialScrollUpdate(instance);
+            }
         },
-        [scrollRef]
+        [scheduleInitialScrollUpdate, scrollRef]
     );
 
     let key = 0;
@@ -325,10 +347,17 @@ export const InfiniteScroller: React.FC<Props> = p => {
 
     const { ref, width, height } = useResizeDetector<HTMLDivElement>(initialSize);
 
-    if (typeof window !== "undefined" && (lastProps.current?.height !== height || lastProps.current?.width !== width)) {
-        window.setTimeout(() => onScrollRef.current(), 0);
+    if (lastProps.current?.height !== height || lastProps.current?.width !== width) {
         lastProps.current = { width, height };
     }
+
+    React.useLayoutEffect(() => {
+        if (typeof window === "undefined" || width === undefined || height === undefined) return;
+        const scrollElement = scroller.current;
+        if (scrollElement !== null) {
+            scheduleInitialScrollUpdate(scrollElement);
+        }
+    }, [height, scheduleInitialScrollUpdate, width]);
 
     if ((width ?? 0) === 0 || (height ?? 0) === 0) return <div ref={ref} />;
 

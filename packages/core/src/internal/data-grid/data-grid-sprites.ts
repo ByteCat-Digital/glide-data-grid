@@ -62,7 +62,7 @@ export class SpriteManager {
         alpha: number = 1
     ) {
         const [bgColor, fgColor] = getColors(variant, theme);
-        const rSize = size * Math.ceil(window.devicePixelRatio);
+        const rSize = size * Math.ceil(window.devicePixelRatio ?? 1);
         const key = `${bgColor}_${fgColor}_${rSize}_${sprite}`;
 
         let spriteCanvas = this.spriteMap.get(key);
@@ -84,7 +84,7 @@ export class SpriteManager {
             if (promise === undefined) return;
 
             this.inFlight++;
-            promise
+            void promise
                 .then(() => {
                     spriteCtx.drawImage(imgSource, 0, 0, rSize, rSize);
                 })

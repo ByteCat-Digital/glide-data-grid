@@ -12,7 +12,7 @@ function getRandomNumber(x: number, y: number): number {
     seed ^= seed >> 17;
     seed ^= seed << 5;
 
-    // eslint-disable-next-line unicorn/number-literal-case
+     
     return (seed / 0xff_ff_ff_ff) * 2;
 }
 

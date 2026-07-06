@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+ 
 import * as React from "react";
 import DrilldownOverlayEditor from "../internal/data-grid-overlay-editor/private/drilldown-overlay-editor.js";
 import {
@@ -55,7 +55,7 @@ function getAndCacheDrilldownBorder(
     dpr: number;
     padding: number;
 } | null {
-    const dpr = Math.ceil(window.devicePixelRatio);
+    const dpr = Math.ceil(window.devicePixelRatio ?? 1);
     const shadowBlur = 5;
     const targetHeight = height - shadowBlur * 2;
     const middleWidth = 4;

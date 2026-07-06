@@ -15,6 +15,11 @@ export default defineConfig({
         fakeTimers: {
             toFake: [
                 ...(configDefaults.fakeTimers.toFake ?? []),
+                "setTimeout",
+                "clearTimeout",
+                "setInterval",
+                "clearInterval",
+                "Date",
                 "performance",
                 "requestAnimationFrame",
                 "cancelAnimationFrame",

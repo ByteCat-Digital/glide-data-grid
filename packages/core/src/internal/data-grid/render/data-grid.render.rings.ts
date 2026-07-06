@@ -1,6 +1,12 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-/* eslint-disable unicorn/no-for-loop */
-import { type GridSelection, type InnerGridCell, type Item, type FillHandle, DEFAULT_FILL_HANDLE } from "../data-grid-types.js";
+ 
+ 
+import {
+    type GridSelection,
+    type InnerGridCell,
+    type Item,
+    type FillHandle,
+    DEFAULT_FILL_HANDLE,
+} from "../data-grid-types.js";
 import { getStickyWidth, type MappedGridColumn, computeBounds, getFreezeTrailingHeight } from "./data-grid-lib.js";
 import { type FullTheme } from "../../../common/styles.js";
 import { blend, withAlpha } from "../color-parser.js";
@@ -228,7 +234,7 @@ export function drawFillHandle(
         translateY,
         totalHeaderHeight,
         (col, drawX, colDrawY, clipX, startRow) => {
-            clipX;
+            void clipX;
             if (col.sticky && targetCol > col.sourceIndex) return;
 
             const isBeforeTarget = col.sourceIndex < targetColSpan[0];
@@ -278,7 +284,7 @@ export function drawFillHandle(
                             // Draw a larger, outlined fill handle similar to Excel / Google Sheets.
                             const size = fill.size;
                             const half = size / 2;
-                            
+
                             // Place the handle so its center sits on the bottom-right corner of the cell,
                             // plus any configured offsets (fill.offsetX, fill.offsetY).
                             // Offset by half pixel to align with grid lines.
@@ -302,13 +308,7 @@ export function drawFillHandle(
                                 ctx.strokeStyle = theme.bgCell;
                                 if (fill.shape === "circle") {
                                     ctx.beginPath();
-                                    ctx.arc(
-                                        hx + half,
-                                        hy + half,
-                                        half + fill.outline / 2,
-                                        0,
-                                        Math.PI * 2
-                                    );
+                                    ctx.arc(hx + half, hy + half, half + fill.outline / 2, 0, Math.PI * 2);
                                     ctx.stroke();
                                 } else {
                                     ctx.strokeRect(

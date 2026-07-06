@@ -31,13 +31,13 @@ import {
     standardAfterEach,
 } from "./test-utils.js";
 
-describe("data-editor", () => {
-    vi.mock("../src/common/resize-detector", () => {
-        return {
-            useResizeDetector: () => ({ ref: undefined, width: 1000, height: 1000 }),
-        };
-    });
+vi.mock("../src/common/resize-detector", () => {
+    return {
+        useResizeDetector: () => ({ ref: undefined, width: 1000, height: 1000 }),
+    };
+});
 
+describe("data-editor", () => {
     beforeEach(() => {
         standardBeforeEach();
     });

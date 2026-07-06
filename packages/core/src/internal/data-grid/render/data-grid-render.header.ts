@@ -233,7 +233,7 @@ export function drawGroups(
 
                 ctx.globalAlpha = 0.6;
 
-                // eslint-disable-next-line prefer-const
+                 
                 const [mouseX, mouseY] = hovered?.[1] ?? [-1, -1];
                 for (let i = 0; i < group.actions.length; i++) {
                     const action = group.actions[i];

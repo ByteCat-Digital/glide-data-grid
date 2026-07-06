@@ -95,7 +95,7 @@ const renderer: CustomRenderer<StarCell> = {
         return true;
     },
     provideEditor: () => {
-        // eslint-disable-next-line react/display-name
+         
         return p => (
             <EditorWrap>
                 {[0, 1, 2, 3, 4].map(index => (

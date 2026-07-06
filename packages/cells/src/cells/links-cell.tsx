@@ -127,7 +127,7 @@ const renderer: CustomRenderer<LinksCell> = {
 
         return true;
     },
-    // eslint-disable-next-line react/display-name
+     
     provideEditor: () => p => {
         const { value, onChange } = p;
         const { links, maxLinks = Number.MAX_SAFE_INTEGER } = value.data;
@@ -297,7 +297,7 @@ function ignoreTab(e: React.KeyboardEvent) {
     }
 }
 
-const LinkTitleEditor: React.VFC<LinkTitleEditorProps> = p => {
+const LinkTitleEditor: React.FC<LinkTitleEditorProps> = p => {
     const { link, onChange, title, onDelete, focus } = p;
     return (
         <div className="gdg-link-title-editor">

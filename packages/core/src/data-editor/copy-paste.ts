@@ -1,4 +1,4 @@
-/* eslint-disable sonarjs/no-duplicate-string */
+ 
 import { assertNever } from "../common/support.js";
 import {
     BooleanEmpty,

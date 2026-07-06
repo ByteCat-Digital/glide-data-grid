@@ -146,6 +146,7 @@ const basicProps: DataEditorProps = {
     getCellsForSelection: true,
     groupHeaderHeight: 32,
     headerHeight: 36,
+    initialSize: [1000, 1000],
     rowHeight: 32,
     onRowAppended: () => undefined,
     trailingRowOptions: {
@@ -216,13 +217,13 @@ const EventedDataEditor = React.forwardRef<DataEditorRef, DataEditorProps>((p, r
     );
 });
 
-describe("data-editor-input", () => {
-    vi.mock("../src/common/resize-detector", () => {
-        return {
-            useResizeDetector: () => ({ ref: undefined, width: 1000, height: 1000 }),
-        };
-    });
+vi.mock("../src/common/resize-detector", () => {
+    return {
+        useResizeDetector: () => ({ ref: undefined, width: 1000, height: 1000 }),
+    };
+});
 
+describe("data-editor-input", () => {
     beforeEach(() => {
         standardBeforeEach();
 

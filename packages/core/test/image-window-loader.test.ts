@@ -164,7 +164,9 @@ describe("ImageWindowLoaderImpl", () => {
             img.addEventListener = vi.fn((_kind: string, cb: any) => cb());
             vi.useFakeTimers();
 
-            const spyConstructor = vi.spyOn(window, "Image").mockImplementation(() => img);
+            const spyConstructor = vi.spyOn(window, "Image").mockImplementation(function () {
+                return img;
+            } as any);
             img.decode = vi.fn().mockResolvedValue(undefined);
 
             // Act: Load an image and simulate its successful loading
@@ -189,7 +191,9 @@ describe("ImageWindowLoaderImpl", () => {
             img.addEventListener = vi.fn((_kind: string, cb: any) => cb());
             vi.useFakeTimers();
 
-            const spyConstructor = vi.spyOn(window, "Image").mockImplementation(() => img);
+            const spyConstructor = vi.spyOn(window, "Image").mockImplementation(function () {
+                return img;
+            } as any);
             img.decode = vi.fn().mockRejectedValue(new Error("Decoding failed"));
 
             // Act: Load an image and simulate its successful loading but decoding failure

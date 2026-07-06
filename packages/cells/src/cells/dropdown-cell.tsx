@@ -16,7 +16,7 @@ import {
 interface CustomMenuProps extends MenuProps<any> {}
 
 const CustomMenu: React.FC<CustomMenuProps> = p => {
-    const { Menu } = components;
+    const Menu = components.Menu as React.ComponentType<CustomMenuProps>;
     const { children, ...rest } = p;
     return <Menu {...rest}>{children}</Menu>;
 };
@@ -101,31 +101,33 @@ const Editor: ReturnType<ProvideEditorCallback<DropdownCell>> = p => {
                 onInputChange={setInputValue}
                 menuPlacement={"auto"}
                 value={values.find(x => x.value === value)}
-                styles={{
-                    control: base => ({
-                        ...base,
-                        border: 0,
-                        boxShadow: "none",
-                    }),
-                    option: (base, { isFocused }) => ({
-                        ...base,
-                        fontSize: theme.editorFontSize,
-                        fontFamily: theme.fontFamily,
-                        cursor: isFocused ? "pointer" : undefined,
-                        paddingLeft: theme.cellHorizontalPadding,
-                        paddingRight: theme.cellHorizontalPadding,
-                        ":active": {
-                            ...base[":active"],
-                            color: theme.accentFg,
-                        },
-                        // Add some content in case the option is empty
-                        // so that the option height can be calculated correctly
-                        ":empty::after": {
-                            content: '"&nbsp;"',
-                            visibility: "hidden",
-                        },
-                    }),
-                }}
+                styles={
+                    {
+                        control: (base: any) => ({
+                            ...base,
+                            border: 0,
+                            boxShadow: "none",
+                        }),
+                        option: (base: any, { isFocused }: any) => ({
+                            ...base,
+                            fontSize: theme.editorFontSize,
+                            fontFamily: theme.fontFamily,
+                            cursor: isFocused ? "pointer" : undefined,
+                            paddingLeft: theme.cellHorizontalPadding,
+                            paddingRight: theme.cellHorizontalPadding,
+                            ":active": {
+                                ...base[":active"],
+                                color: theme.accentFg,
+                            },
+                            // Add some content in case the option is empty
+                            // so that the option height can be calculated correctly
+                            ":empty::after": {
+                                content: '"&nbsp;"',
+                                visibility: "hidden",
+                            },
+                        }),
+                    } as any
+                }
                 theme={t => {
                     return {
                         ...t,
@@ -151,7 +153,7 @@ const Editor: ReturnType<ProvideEditorCallback<DropdownCell>> = p => {
                         },
                     };
                 }}
-                menuPortalTarget={portalElementRef?.current ??  document.getElementById("portal")}
+                menuPortalTarget={portalElementRef?.current ?? document.getElementById("portal")}
                 autoFocus={true}
                 openMenuOnFocus={true}
                 components={{
@@ -194,7 +196,7 @@ const renderer: CustomRenderer<DropdownCell> = {
             return opt.value === value;
         });
 
-        const displayText = typeof foundOption === "string" ? foundOption : foundOption?.label ?? "";
+        const displayText = typeof foundOption === "string" ? foundOption : (foundOption?.label ?? "");
         if (displayText) {
             ctx.fillStyle = theme.textDark;
             ctx.fillText(

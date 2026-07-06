@@ -1,5 +1,5 @@
-/* eslint-disable sonarjs/no-duplicate-string */
-/* eslint-disable unicorn/no-for-loop */
+ 
+ 
 import { deepEqual } from "../../../common/support.js";
 import { type Rectangle } from "../data-grid-types.js";
 import { getStickyWidth, type MappedGridColumn, getFreezeTrailingHeight } from "./data-grid-lib.js";

@@ -1,7 +1,6 @@
-import { renderHook, act } from "@testing-library/react-hooks";
+import { act, renderHook } from "@testing-library/react";
 import useKineticScroll from "../src/internal/scrolling-data-grid/use-kinetic-scroll.js";
 import { vi, expect, describe, it, afterEach, beforeEach } from "vitest";
-import { fireEvent } from "@testing-library/react";
 
 describe("useKineticScroll", () => {
     let targetScroller: { current: HTMLDivElement };
@@ -13,13 +12,10 @@ describe("useKineticScroll", () => {
 
         vi.spyOn(targetScroller.current, "addEventListener");
         vi.spyOn(targetScroller.current, "removeEventListener");
-        vi.useFakeTimers();
     });
 
     afterEach(() => {
         vi.clearAllMocks();
-        vi.runOnlyPendingTimers();
-        vi.useRealTimers();
     });
 
     it("registers and unregisters event listeners based on isEnabled", () => {
@@ -40,18 +36,18 @@ describe("useKineticScroll", () => {
         expect(targetScroller.current.removeEventListener).toHaveBeenCalledTimes(2);
     });
 
-    it("handles scroll events and triggers callback", () => {
-        renderHook(() => useKineticScroll(true, callback, targetScroller));
+    it("handles scroll events and triggers callback", async () => {
+        const { unmount } = renderHook(() => useKineticScroll(true, callback, targetScroller));
 
-        act(() => {
+        await act(async () => {
             targetScroller.current.dispatchEvent(new Event("touchstart"));
-            vi.advanceTimersByTime(1000);
-            fireEvent.touchEnd(targetScroller.current, {
-                touches: [],
-            });
-            vi.advanceTimersByTime(1000 / 120);
+            const touchEnd = new Event("touchend") as TouchEvent;
+            Object.defineProperty(touchEnd, "touches", { value: [] });
+            targetScroller.current.dispatchEvent(touchEnd);
+            await new Promise(resolve => window.setTimeout(resolve, 20));
         });
 
         expect(callback).toHaveBeenCalled();
+        unmount();
     });
 });
