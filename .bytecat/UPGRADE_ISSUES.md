@@ -32,6 +32,7 @@
 - **CRA test project removed**: The prior CRA fixture had 27 audit findings: 9 low, 8 moderate, and 10 high. The issues were largely from obsolete `react-scripts@5.0.1` and its transitive toolchain (`svgo`, `webpack-dev-server`, `serialize-javascript`, `postcss`, Jest 27/jsdom, Workbox, etc.). Rather than preserve a known vulnerable compatibility fixture, `test-projects/cra5-gdg` was removed. If CRA compatibility is needed again, create a fresh dedicated fixture and treat it as legacy/unsupported unless the React Scripts audit story changes.
 - **Next test project**: Current `npm audit --json` reports 2 moderate findings: `postcss` through `next@16.2.9`. npm suggests a force downgrade to `next@9.3.3`, which should not be applied.
 - **Fork package names**: Publishable packages and internal dependencies have been moved from the upstream `@glideapps` scope to the Bytecat `@bytecat` scope. The built `packages/cells/dist` and `packages/source/dist` outputs were regenerated so published runtime and declaration files import `@bytecat/glide-data-grid`.
+- **Docs Markdown rendering**: `packages/core/src/docs/doc-wrapper.tsx` no longer uses `dangerouslySetInnerHTML` for `marked(p.children)`. Story docs now render `marked.lexer` tokens as React elements, escape raw HTML through React text rendering, and reject unsafe link/image URL schemes.
 
 ## Verification Performed
 

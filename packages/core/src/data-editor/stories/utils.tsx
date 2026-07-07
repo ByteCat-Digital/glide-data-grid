@@ -204,13 +204,27 @@ export const PropName = styled.span`
     color: #ffe394;
 `;
 
-export const Description = styled.p`
+function isValidReactRef(ref: unknown): ref is React.Ref<unknown> {
+    return ref === null || typeof ref === "function" || Object.prototype.hasOwnProperty.call(ref, "current");
+}
+
+function withValidRef<TElement, TProps extends object>(
+    Component: React.ComponentType<TProps & React.RefAttributes<TElement>>
+): React.ForwardRefExoticComponent<React.PropsWithoutRef<TProps> & React.RefAttributes<TElement>> {
+    const Wrapped = React.forwardRef<TElement, TProps>((props, ref) => (
+        <Component {...props} ref={isValidReactRef(ref) ? ref : undefined} />
+    ));
+    Wrapped.displayName = Component.displayName;
+    return Wrapped;
+}
+
+export const Description = withValidRef<HTMLDivElement, React.ComponentProps<"div">>(styled.div`
     font-size: 18px;
     flex-shrink: 0;
     margin: 0 0 20px 0;
-`;
+`);
 
-export const MoreInfo = styled.p`
+export const MoreInfo = withValidRef<HTMLParagraphElement, React.ComponentProps<"p">>(styled.p`
     font-size: 14px;
     flex-shrink: 0;
     margin: 0 0 20px 0;
@@ -227,7 +241,7 @@ export const MoreInfo = styled.p`
         border: none;
         cursor: pointer;
     }
-`;
+`);
 
 interface BeautifulProps {
     title: string;

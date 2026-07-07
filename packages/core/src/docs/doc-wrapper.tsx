@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "@linaria/react";
-import { marked } from "marked";
+import { marked, type Token, type Tokens } from "marked";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import highlightStyle from "react-syntax-highlighter/dist/esm/styles/hljs/github";
 
@@ -44,15 +44,151 @@ export const Highlight: React.FC<{ children: string }> = p => {
     );
 };
 
-export const Marked: React.FC<{ children: string }> = p => {
+const safeUrl = (url: string): string | undefined => {
+    const trimmed = url.trim();
+
+    if (
+        trimmed.startsWith("#") ||
+        trimmed.startsWith("/") ||
+        trimmed.startsWith("./") ||
+        trimmed.startsWith("../") ||
+        /^(https?:|mailto:|tel:)/i.test(trimmed)
+    ) {
+        return trimmed;
+    }
+
+    return undefined;
+};
+
+const renderInlineTokens = (tokens: Token[], keyPrefix: string): React.ReactNode[] =>
+    tokens.map((token, index) => renderInlineToken(token, `${keyPrefix}-${index}`));
+
+const renderInlineToken = (token: Token, key: React.Key): React.ReactNode => {
+    switch (token.type) {
+        case "br":
+            return <br key={key} />;
+        case "codespan":
+            return <code key={key}>{token.text}</code>;
+        case "del":
+            return <del key={key}>{renderInlineTokens(token.tokens, `${key}-del`)}</del>;
+        case "em":
+            return <em key={key}>{renderInlineTokens(token.tokens, `${key}-em`)}</em>;
+        case "escape":
+            return <React.Fragment key={key}>{token.text}</React.Fragment>;
+        case "html":
+            return <React.Fragment key={key}>{token.text}</React.Fragment>;
+        case "image": {
+            const src = safeUrl(token.href);
+            if (src === undefined) return null;
+            return <img key={key} src={src} alt={token.text} title={token.title ?? undefined} />;
+        }
+        case "link": {
+            const href = safeUrl(token.href);
+            if (href === undefined) {
+                return <React.Fragment key={key}>{renderInlineTokens(token.tokens, `${key}-link`)}</React.Fragment>;
+            }
+            return (
+                <a key={key} href={href} title={token.title ?? undefined}>
+                    {renderInlineTokens(token.tokens, `${key}-link`)}
+                </a>
+            );
+        }
+        case "strong":
+            return <strong key={key}>{renderInlineTokens(token.tokens, `${key}-strong`)}</strong>;
+        case "text":
+            if (token.tokens !== undefined) {
+                return <React.Fragment key={key}>{renderInlineTokens(token.tokens, `${key}-text`)}</React.Fragment>;
+            }
+            return <React.Fragment key={key}>{token.text}</React.Fragment>;
+        default:
+            if ("tokens" in token && token.tokens !== undefined) {
+                return <React.Fragment key={key}>{renderInlineTokens(token.tokens, `${key}-tokens`)}</React.Fragment>;
+            }
+            return <React.Fragment key={key}>{token.raw}</React.Fragment>;
+    }
+};
+
+const renderTableCell = (cell: Tokens.TableCell, key: React.Key): React.ReactNode => {
+    const style = cell.align === null ? undefined : { textAlign: cell.align };
+    const Cell = cell.header ? "th" : "td";
+
     return (
-        <div
-            className="marked"
-            dangerouslySetInnerHTML={{
-                __html: marked(p.children),
-            }}
-        />
+        <Cell key={key} style={style}>
+            {renderInlineTokens(cell.tokens, `${key}-cell`)}
+        </Cell>
     );
+};
+
+const renderBlockToken = (token: Token, key: React.Key): React.ReactNode => {
+    switch (token.type) {
+        case "blockquote":
+            return <blockquote key={key}>{renderBlockTokens(token.tokens, `${key}-blockquote`)}</blockquote>;
+        case "code":
+            return (
+                <pre key={key}>
+                    <code>{token.text}</code>
+                </pre>
+            );
+        case "heading": {
+            const Heading = `h${Math.min(Math.max(token.depth, 1), 6)}` as React.ElementType;
+            return <Heading key={key}>{renderInlineTokens(token.tokens, `${key}-heading`)}</Heading>;
+        }
+        case "hr":
+            return <hr key={key} />;
+        case "html":
+            return <React.Fragment key={key}>{token.text}</React.Fragment>;
+        case "list": {
+            const listToken = token as Tokens.List;
+            const List = listToken.ordered ? "ol" : "ul";
+            return (
+                <List
+                    key={key}
+                    start={listToken.ordered && typeof listToken.start === "number" ? listToken.start : undefined}>
+                    {listToken.items.map((item, index) => (
+                        <li key={`${key}-item-${index}`}>{renderBlockTokens(item.tokens, `${key}-item-${index}`)}</li>
+                    ))}
+                </List>
+            );
+        }
+        case "paragraph":
+            return <p key={key}>{renderInlineTokens(token.tokens, `${key}-paragraph`)}</p>;
+        case "space":
+            return null;
+        case "table":
+            return (
+                <table key={key}>
+                    <thead>
+                        <tr>{token.header.map((cell, index) => renderTableCell(cell, `${key}-header-${index}`))}</tr>
+                    </thead>
+                    <tbody>
+                        {token.rows.map((row, rowIndex) => (
+                            <tr key={`${key}-row-${rowIndex}`}>
+                                {row.map((cell, cellIndex) =>
+                                    renderTableCell(cell, `${key}-row-${rowIndex}-${cellIndex}`)
+                                )}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            );
+        case "text":
+            if (token.tokens !== undefined) {
+                return <React.Fragment key={key}>{renderInlineTokens(token.tokens, `${key}-text`)}</React.Fragment>;
+            }
+            return <React.Fragment key={key}>{token.text}</React.Fragment>;
+        default:
+            if ("tokens" in token && token.tokens !== undefined) {
+                return <React.Fragment key={key}>{renderBlockTokens(token.tokens, `${key}-tokens`)}</React.Fragment>;
+            }
+            return <React.Fragment key={key}>{token.raw}</React.Fragment>;
+    }
+};
+
+const renderBlockTokens = (tokens: Token[], keyPrefix: string): React.ReactNode[] =>
+    tokens.map((token, index) => renderBlockToken(token, `${keyPrefix}-${index}`));
+
+export const Marked: React.FC<{ children: string }> = p => {
+    return <div className="marked">{renderBlockTokens(marked.lexer(p.children), "marked")}</div>;
 };
 
 const BeautifulStyle = styled.div`
@@ -477,13 +613,27 @@ export const PropName = styled.span`
     color: #ffe394;
 `;
 
-export const Description = styled.p`
+function isValidReactRef(ref: unknown): ref is React.Ref<unknown> {
+    return ref === null || typeof ref === "function" || Object.prototype.hasOwnProperty.call(ref, "current");
+}
+
+function withValidRef<TElement, TProps extends object>(
+    Component: React.ComponentType<TProps & React.RefAttributes<TElement>>
+): React.ForwardRefExoticComponent<React.PropsWithoutRef<TProps> & React.RefAttributes<TElement>> {
+    const Wrapped = React.forwardRef<TElement, TProps>((props, ref) => (
+        <Component {...props} ref={isValidReactRef(ref) ? ref : undefined} />
+    ));
+    Wrapped.displayName = Component.displayName;
+    return Wrapped;
+}
+
+export const Description = withValidRef<HTMLDivElement, React.ComponentProps<"div">>(styled.div`
     font-size: 18px;
     flex-shrink: 0;
     margin: 0 0 20px 0;
-`;
+`);
 
-export const MoreInfo = styled.p`
+export const MoreInfo = withValidRef<HTMLParagraphElement, React.ComponentProps<"p">>(styled.p`
     font-size: 14px;
     flex-shrink: 0;
     margin: 0 0 20px 0;
@@ -500,7 +650,7 @@ export const MoreInfo = styled.p`
         border: none;
         cursor: pointer;
     }
-`;
+`);
 
 export const DocWrapper: React.FC = p => {
     const { children } = p;

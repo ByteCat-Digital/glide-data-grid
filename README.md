@@ -3,9 +3,30 @@
 >
 > This package is a Bytecat-maintained fork of
 > [Glide Data Grid](https://github.com/glideapps/glide-data-grid). It was
-> created to address security/audit findings, dependency version bumps, and
-> compatibility updates while waiting for upstream to catch up. It is not
-> intended to be a long-term independently maintained fork.
+> prepared quickly to satisfy Bytecat code-audit requirements by addressing
+> security/audit findings, dependency version bumps, and compatibility updates.
+> It is not intended to be a long-term independently maintained fork.
+>
+> The upstream
+> [glideapps/glide-data-grid](https://github.com/glideapps/glide-data-grid)
+> repository remains the one true source for Glide Data Grid. Please use the
+> upstream project for the canonical implementation, documentation, issue
+> tracking, and contribution workflow. This fork may be useful if you also need
+> a Glide Data Grid package with these code-audit-oriented updates applied, but
+> it is not a replacement for upstream governance or support. Pull requests and
+> issues opened here will not be accepted or processed.
+>
+> The changes in this fork are available for anyone who wants to contribute the
+> relevant work back upstream. Because the work was done under time pressure, it
+> was not organized as a clean sequence of upstream-ready pull requests. Bytecat
+> is happy to help structure the relevant changes into suitable PRs for upstream
+> review if that would be useful to the Glide maintainers or other contributors.
+>
+> Testing for this fork was focused on the features and integration paths that
+> Bytecat actively uses. It was not a comprehensive validation of every Glide
+> Data Grid capability, so some functionality may have regressions or breaking
+> behavior in this fork. If you depend on behavior outside Bytecat's usage, we
+> recommend using the upstream package directly.
 >
 > This fork is not affiliated with, sponsored by, or endorsed by Glide. The
 > original MIT license and copyright notices are preserved. See
