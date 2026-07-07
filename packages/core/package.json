@@ -1,5 +1,5 @@
 {
-    "name": "@glideapps/glide-data-grid",
+    "name": "@bytecat/glide-data-grid",
     "version": "6.0.4-alpha25",
     "description": "React data grid for beautifully displaying and editing large amounts of data with amazing performance.",
     "sideEffects": [
@@ -35,7 +35,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/glideapps/glide-data-grid.git",
+        "url": "git+https://github.com/ByteCat-Digital/glide-data-grid.git",
         "directory": "packages/core"
     },
     "keywords": [
@@ -50,12 +50,12 @@
         "cell",
         "canvas"
     ],
-    "author": "Glide",
+    "author": "Bytecat; forked from Glide Data Grid",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/glideapps/glide-data-grid/issues"
+        "url": "https://github.com/ByteCat-Digital/glide-data-grid/issues"
     },
-    "homepage": "https://grid.glideapps.com",
+    "homepage": "https://bytecat.ai",
     "dependencies": {
         "@linaria/react": "^8.0.0",
         "canvas-hypertxt": "^1.0.3",

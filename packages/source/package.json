@@ -1,5 +1,5 @@
 {
-    "name": "@glideapps/glide-data-grid-source",
+    "name": "@bytecat/glide-data-grid-source",
     "version": "6.0.4-alpha25",
     "description": "Useful data source hooks for Glide Data Grid",
     "sideEffects": false,
@@ -23,11 +23,11 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/glideapps/glide-data-grid.git",
+        "url": "git+https://github.com/ByteCat-Digital/glide-data-grid.git",
         "directory": "packages/source"
     },
-    "homepage": "https://github.com/glideapps/glide-data-grid/tree/main/packages/source",
-    "author": "Glide",
+    "homepage": "https://github.com/ByteCat-Digital/glide-data-grid/tree/main/packages/source",
+    "author": "Bytecat; forked from Glide Data Grid",
     "license": "MIT",
     "keywords": [
         "react",
@@ -42,7 +42,7 @@
         "canvas"
     ],
     "dependencies": {
-        "@glideapps/glide-data-grid": "6.0.4-alpha25"
+        "@bytecat/glide-data-grid": "6.0.4-alpha25"
     },
     "peerDependencies": {
         "lodash": "^4.17.19",

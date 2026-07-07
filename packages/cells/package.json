@@ -1,5 +1,5 @@
 {
-    "name": "@glideapps/glide-data-grid-cells",
+    "name": "@bytecat/glide-data-grid-cells",
     "version": "6.0.4-alpha25",
     "description": "Extra cells for glide-data-grid",
     "sideEffects": [
@@ -31,11 +31,11 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/glideapps/glide-data-grid.git",
+        "url": "git+https://github.com/ByteCat-Digital/glide-data-grid.git",
         "directory": "packages/cells"
     },
-    "homepage": "https://github.com/glideapps/glide-data-grid/tree/main/packages/cells",
-    "author": "Glide",
+    "homepage": "https://github.com/ByteCat-Digital/glide-data-grid/tree/main/packages/cells",
+    "author": "Bytecat; forked from Glide Data Grid",
     "license": "MIT",
     "keywords": [
         "react",
@@ -50,7 +50,7 @@
         "canvas"
     ],
     "dependencies": {
-        "@glideapps/glide-data-grid": "6.0.4-alpha25",
+        "@bytecat/glide-data-grid": "6.0.4-alpha25",
         "@linaria/react": "^8.0.0",
         "@toast-ui/editor": "3.2.2",
         "@toast-ui/react-editor": "3.2.3",

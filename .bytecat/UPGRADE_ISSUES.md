@@ -10,23 +10,38 @@
 - **Vitest 4 / React 19 test harness**: The React act environment flag is now set, `ResizeObserver` and `Image` constructor-style mocks were fixed, hook tests using `@testing-library/react-hooks` were migrated to `renderHook` from `@testing-library/react`, and fake timers now explicitly include timeout/interval APIs plus `Date`. Manual regression testing should still cover visible-region updates, accessibility tree updates, context menu events, drag/drop, overlay close/edit behavior, and new-row scrolling because several failures were caused by timer/ref/effect replay semantics changing under React 19 and Vitest 4.
 - **ESLint 10 flat config**: Package-local `eslint.config.mjs` files replaced `.eslintrc` loading. New React compiler-adjacent rules and newer Sonar/Unicorn recommended rules were too noisy for this codebase and were scoped out in config. Re-audit lint policy separately if you want the stricter modern recommendations.
 - **react-select 5.10.2 with React 19 types**: `packages/cells` needed local casts around `react-select` component/style adapter boundaries. Manually test dropdown and multi-select cells.
-- **web-vitals 5 in CRA test project**: `getFID` was replaced with `onINP`, and `ReportHandler` was replaced with `Metric` callback typing.
 - **Next 16 test project**: Build passes, but Next rewrote `tsconfig.json` options and warns about multiple lockfiles/workspace root inference. Review the generated `tsconfig.json` diff and consider adding explicit `turbopack.root`.
-- **CRA 5 test project**: Build passes after TypeScript asset declarations and React 19 `createRoot`, but CRA 5 remains obsolete and still carries transitive advisories.
+- **CRA 5 test project removed**: The previous `test-projects/cra5-gdg` fixture was removed rather than continuing to carry `react-scripts@5.0.1`. CRA 5 is obsolete, its React Scripts toolchain produced unresolved transitive audit findings, and force-level audit remediation pointed at inappropriate React Scripts replacement/downgrade paths rather than a safe compatibility update.
 
 ## Security / Audit Follow-up
 
-- **Root workspace**: `npm audit fix` reduced findings to 3 moderate advisories from `@toast-ui/editor` / `@toast-ui/react-editor` via vulnerable `dompurify`. npm only suggests `npm audit fix --force`, which downgrades `@toast-ui/editor` to `3.1.0`; do not force this without testing markdown/article cells.
-- **CRA test project**: Non-force audit fixes reduced findings from 67 to 26 vulnerabilities. Remaining issues are largely from `react-scripts@5.0.1` and require force-level changes or replacing CRA.
-- **Next test project**: Non-force audit fixes reduced findings to 2 moderate `postcss` advisories through `next@16.2.9`; npm suggests a force downgrade to `next@9.3.3`, which should not be applied.
+- **Root workspace**: Current `npm audit --json` reports 0 vulnerabilities. The previous moderate advisories from `@toast-ui/editor` / `@toast-ui/react-editor` through vulnerable `dompurify` were addressed with a root npm `overrides` entry:
+
+  ```json
+  {
+      "@toast-ui/editor": {
+          "dompurify": "^3.4.11"
+      }
+  }
+  ```
+
+  `npm ls dompurify @toast-ui/editor @toast-ui/react-editor` currently resolves `@toast-ui/editor@3.2.2`, `@toast-ui/react-editor@3.2.3`, and `dompurify@3.4.11`. Do not remove the override unless `@toast-ui/editor` itself updates its `dompurify` dependency to a safe version and audit remains clean.
+- **Package-local lockfiles**: The root workspace lockfile is the authoritative install state for the monorepo. Some package-local lockfiles are historical npm v1 locks and may show old standalone resolutions if inspected directly; rely on the root `package-lock.json`, `npm ls`, and root `npm audit` for current publish/build verification.
+- **CRA test project removed**: The prior CRA fixture had 27 audit findings: 9 low, 8 moderate, and 10 high. The issues were largely from obsolete `react-scripts@5.0.1` and its transitive toolchain (`svgo`, `webpack-dev-server`, `serialize-javascript`, `postcss`, Jest 27/jsdom, Workbox, etc.). Rather than preserve a known vulnerable compatibility fixture, `test-projects/cra5-gdg` was removed. If CRA compatibility is needed again, create a fresh dedicated fixture and treat it as legacy/unsupported unless the React Scripts audit story changes.
+- **Next test project**: Current `npm audit --json` reports 2 moderate findings: `postcss` through `next@16.2.9`. npm suggests a force downgrade to `next@9.3.3`, which should not be applied.
+- **Fork package names**: Publishable packages and internal dependencies have been moved from the upstream `@glideapps` scope to the Bytecat `@bytecat` scope. The built `packages/cells/dist` and `packages/source/dist` outputs were regenerated so published runtime and declaration files import `@bytecat/glide-data-grid`.
 
 ## Verification Performed
 
-- `npm run build` at repo root passes for all workspaces, with lint warnings remaining.
+- `npm audit --json` at repo root reports 0 vulnerabilities.
 - `npm run test-cells -- --run` passes: 64 tests.
 - `npm run test-source -- --run` passes: 7 tests.
 - `npm test -- --run` passes in `packages/core`: 28 test files, 387 tests.
 - `npm run test -w packages/core -- --run test/data-editor.test.tsx` passes: 142 tests.
 - Focused React 19 harness checks pass: `npm run test -w packages/core -- --run test/data-editor-input.test.tsx test/data-editor-resize.test.tsx test/use-kinetic-scroll.test.ts test/common.test.ts test/image-window-loader.test.ts`.
 - `npm run build` passes in `test-projects/next-gdg`.
-- `npm run build` passes in `test-projects/cra5-gdg`.
+- The obsolete `test-projects/cra5-gdg` fixture was removed because its `react-scripts@5.0.1` toolchain carried unresolved transitive audit findings.
+- `npm run build -w packages/source` passes after the Bytecat package rename.
+- `npm run build -w packages/cells` passes after the Bytecat package rename.
+- `npm pack --dry-run --json --cache /tmp/npm-cache-gdg` confirms the publish names `@bytecat/glide-data-grid`, `@bytecat/glide-data-grid-cells`, and `@bytecat/glide-data-grid-source`.
+- `rg` verification confirms no active source, test-project, or built `dist` imports remain for `@glideapps/glide-data-grid`; remaining `@glideapps` references are preserved upstream README/changelog/history or explicit "before" examples.

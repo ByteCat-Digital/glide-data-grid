@@ -1,4 +1,4 @@
-import type { EditableGridCell, GridCell, GridSelection, Item, DataEditorRef } from "@glideapps/glide-data-grid";
+import type { EditableGridCell, GridCell, GridSelection, Item, DataEditorRef } from "@bytecat/glide-data-grid";
 
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 

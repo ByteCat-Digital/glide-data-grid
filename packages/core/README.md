@@ -1,3 +1,63 @@
+> [!IMPORTANT]
+> **Bytecat fork notice**
+>
+> This package is the `@bytecat/glide-data-grid` fork of upstream
+> `@glideapps/glide-data-grid`. It exists to address security/audit findings,
+> dependency version bumps, and compatibility updates while waiting for
+> upstream to catch up. It is not intended to be a long-term independently
+> maintained fork.
+>
+> This fork is not affiliated with, sponsored by, or endorsed by Glide. The
+> original MIT license and copyright notices are preserved. The upgrade work
+> was performed primarily with assistance from Codex/AI, with human review and
+> verification by Bytecat. Bytecat: https://bytecat.ai.
+
+## Bytecat fork changes
+
+Items addressed from the upstream package in this fork:
+
+-   Dependency and compatibility updates for React 19, React DOM 19, React
+    types 19, TypeScript 6, Babel 8, Linaria 8 / wyw-in-js 2, Storybook 10,
+    Vitest 4, ESLint 10 flat config, and related test harness changes.
+-   Security/audit follow-up for the root workspace and test projects,
+    including documented remaining advisories that require manual judgement
+    rather than force-level downgrades.
+-   Test-project updates for Next 16 compatibility checks. The obsolete CRA 5
+    test project was removed because its unmaintained `react-scripts@5.0.1`
+    toolchain carried unresolved transitive audit findings.
+-   Package publishing metadata changed from the upstream `@glideapps` scope to
+    the Bytecat `@bytecat` scope.
+
+## Before / after package usage
+
+Before, using the upstream package:
+
+```shell
+npm i @glideapps/glide-data-grid
+```
+
+```ts
+import DataEditor from "@glideapps/glide-data-grid";
+import "@glideapps/glide-data-grid/dist/index.css";
+```
+
+After, using this Bytecat fork:
+
+```shell
+npm i @bytecat/glide-data-grid
+```
+
+```ts
+import DataEditor from "@bytecat/glide-data-grid";
+import "@bytecat/glide-data-grid/dist/index.css";
+```
+
+## Original upstream README
+
+The section below is preserved from upstream for context. Its upstream badges,
+links, screenshots, and marketing text describe the original Glide project, not
+Bytecat ownership, affiliation, or endorsement.
+
 <h1 align="center">
   <img src="https://raw.githubusercontent.com/glideapps/glide-data-grid/master/media/icon.png" width="224px"/><br/>
   <b>Glide Data Grid</b>

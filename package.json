@@ -20,7 +20,7 @@
         "test-projects": "cd test-projects/ && ./bootstrap-projects.sh"
     },
     "type": "commonjs",
-    "author": "Glide",
+    "author": "Bytecat; forked from Glide Data Grid",
     "license": "MIT",
     "workspaces": [
         "./packages/core",

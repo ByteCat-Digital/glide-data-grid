@@ -1,3 +1,32 @@
+> [!IMPORTANT]
+> **Bytecat fork notice**
+>
+> This package is the `@bytecat/glide-data-grid-source` fork of upstream
+> `@glideapps/glide-data-grid-source`. It exists as part of the Bytecat fork to
+> address dependency/security and compatibility updates while waiting for
+> upstream to catch up. It is not affiliated with, sponsored by, or endorsed by
+> Glide. Bytecat: https://bytecat.ai.
+
+## Before / after package usage
+
+Before:
+
+```shell
+npm i @glideapps/glide-data-grid-source
+```
+
+After:
+
+```shell
+npm i @bytecat/glide-data-grid-source
+```
+
+## Original upstream README
+
+The section below is preserved from upstream for context. Its upstream badges,
+links, screenshots, and marketing text describe the original Glide project, not
+Bytecat ownership, affiliation, or endorsement.
+
 <h1 align="center">
   <img src="https://raw.githubusercontent.com/glideapps/glide-data-grid/master/icon.png" width="224px"/><br/>
   <b>Glide Data Grid Source</b>
