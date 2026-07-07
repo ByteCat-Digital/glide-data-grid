@@ -10,7 +10,6 @@ import {
 import { DataEditorAll as DataEditor } from "../data-editor-all.js";
 import { SimpleThemeWrapper } from "../stories/story-utils.js";
 import { DocWrapper, Highlight, Marked, Wrapper } from "./doc-wrapper.js";
-import { useLayer } from "react-laag";
 
 export default {
     title: "Glide-Data-Grid/Docs",
@@ -179,29 +178,24 @@ export const Menus: React.FC = () => {
     }, []);
 
     const [showMenu, setShowMenu] = React.useState<{ bounds: Rectangle; col: number }>();
+    const menuRef = React.useRef<HTMLDivElement>(null);
 
     const onHeaderMenuClickedStage2 = React.useCallback((col: number, bounds: Rectangle) => {
         setShowMenu({ col, bounds });
     }, []);
 
-    const { renderLayer, layerProps } = useLayer({
-        isOpen: showMenu !== undefined,
-        triggerOffset: 4,
-        onOutsideClick: () => setShowMenu(undefined),
-        trigger: {
-            getBounds: () => ({
-                bottom: (showMenu?.bounds.y ?? 0) + (showMenu?.bounds.height ?? 0),
-                height: showMenu?.bounds.height ?? 0,
-                left: showMenu?.bounds.x ?? 0,
-                right: (showMenu?.bounds.x ?? 0) + (showMenu?.bounds.width ?? 0),
-                top: showMenu?.bounds.y ?? 0,
-                width: showMenu?.bounds.width ?? 0,
-            }),
-        },
-        placement: "bottom-start",
-        auto: true,
-        possiblePlacements: ["bottom-start", "bottom-end"],
-    });
+    React.useEffect(() => {
+        if (showMenu === undefined) return;
+
+        const closeOnOutsidePointerDown = (event: PointerEvent) => {
+            const target = event.target;
+            if (target instanceof Node && menuRef.current?.contains(target) === true) return;
+            setShowMenu(undefined);
+        };
+
+        window.addEventListener("pointerdown", closeOnOutsidePointerDown);
+        return () => window.removeEventListener("pointerdown", closeOnOutsidePointerDown);
+    }, [showMenu]);
 
     return (
         <DocWrapper>
@@ -209,8 +203,8 @@ export const Menus: React.FC = () => {
                 {`
 # Menus
 
-Glide Data Grid doesn't come with built in menus. Instead it is evented and ready to work with whatever menus you want 
-to use. Let's learn how to add basic menus using [react-laag](https://www.react-laag.com/). Adding menu drop down indicators to headers is as simple
+	Glide Data Grid doesn't come with built in menus. Instead it is evented and ready to work with whatever menus you want 
+	to use. Let's learn how to add basic menus using the grid-provided bounds. Adding menu drop down indicators to headers is as simple
 as passing a bool and listening to click events using \`onHeaderMenuClick\`.`}
             </Marked>
             <Highlight>
@@ -257,7 +251,7 @@ return <DataEditor {...rest} onHeaderMenuClick={onHeaderMenuClick} />;
             </Wrapper>
             <Marked>
                 {`
-The provided coordinates are in page space. This makes it trivial to use [react-laag](https://www.react-laag.com/) to create a basic menu. Some 
+	The provided coordinates are in page space. This makes it trivial to position a basic menu. Some 
 styling would go a long way here.`}
             </Marked>
             <Highlight>
@@ -268,47 +262,28 @@ const onHeaderMenuClick = React.useCallback((col: number, bounds: Rectangle) => 
     setShowMenu({ col, bounds });
 }, []);
 
-const { renderLayer, layerProps } = useLayer({
-    isOpen: showMenu !== undefined,
-    triggerOffset: 4,
-    onOutsideClick: () => setShowMenu(undefined),
-    trigger: {
-        getBounds: () => ({
-            bottom: (showMenu?.bounds.y ?? 0) + (showMenu?.bounds.height ?? 0),
-            height: showMenu?.bounds.height ?? 0,
-            left: showMenu?.bounds.x ?? 0,
-            right: (showMenu?.bounds.x ?? 0) + (showMenu?.bounds.width ?? 0),
-            top: showMenu?.bounds.y ?? 0,
-            width: showMenu?.bounds.width ?? 0,
-        }),
-    },
-    placement: "bottom-start",
-    auto: true,
-    possiblePlacements: ["bottom-start", "bottom-end"],
-    });
-
-return <>
-    <DataEditor {...rest} onHeaderMenuClick={onHeaderMenuClick} />
-    {showMenu !== undefined &&
-        renderLayer(
-            <div
-                {...layerProps}
-                style={{
-                    ...layerProps.style,
-                    width: 300,
-                    padding: 4,
-                    borderRadius: 8,
-                    backgroundColor: "white",
-                    border: "1px solid black",
-                }}>
-                <ul>
-                    <li>Item 1</li>
-                    <li>Item 2</li>
-                    <li>Item 3</li>
-                </ul>
-            </div>
-        )}
-</>;
+	return <>
+	    <DataEditor {...rest} onHeaderMenuClick={onHeaderMenuClick} />
+	    {showMenu !== undefined && (
+	        <div
+	            style={{
+	                position: "fixed",
+	                left: showMenu.bounds.x,
+	                top: showMenu.bounds.y + showMenu.bounds.height + 4,
+	                width: 300,
+	                padding: 4,
+	                borderRadius: 8,
+	                backgroundColor: "white",
+	                border: "1px solid black",
+	            }}>
+	            <ul>
+	                <li>Item 1</li>
+	                <li>Item 2</li>
+	                <li>Item 3</li>
+	            </ul>
+	        </div>
+	    )}
+	</>;
 `}
             </Highlight>
             <Wrapper height={200}>
@@ -318,25 +293,27 @@ return <>
                     rows={data.length}
                     onHeaderMenuClick={onHeaderMenuClickedStage2}
                 />
-                {showMenu !== undefined &&
-                    renderLayer(
-                        <div
-                            {...layerProps}
-                            style={{
-                                ...layerProps.style,
-                                width: 300,
-                                padding: 4,
-                                borderRadius: 8,
-                                backgroundColor: "white",
-                                border: "1px solid black",
-                            }}>
-                            <ul>
-                                <li>Item 1</li>
-                                <li>Item 2</li>
-                                <li>Item 3</li>
-                            </ul>
-                        </div>
-                    )}
+                {showMenu !== undefined && (
+                    <div
+                        ref={menuRef}
+                        style={{
+                            position: "fixed",
+                            left: showMenu.bounds.x,
+                            top: showMenu.bounds.y + showMenu.bounds.height + 4,
+                            width: 300,
+                            padding: 4,
+                            borderRadius: 8,
+                            backgroundColor: "white",
+                            border: "1px solid black",
+                            zIndex: 10_000,
+                        }}>
+                        <ul>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                        </ul>
+                    </div>
+                )}
             </Wrapper>
         </DocWrapper>
     );

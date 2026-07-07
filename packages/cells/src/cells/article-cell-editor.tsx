@@ -1,6 +1,6 @@
 import type { ProvideEditorComponent } from "@bytecat/glide-data-grid";
 import * as React from "react";
-import { Editor, Viewer } from "@toast-ui/react-editor";
+import { Editor, Viewer } from "@toast-ui/editor";
 import { styled } from "@linaria/react";
 import type { ArticleCell } from "./article-cell-types.js";
 
@@ -32,6 +32,84 @@ const Wrapper = styled.div`
     }
 `;
 
+const defaultToolbarItems = [
+    ["heading", "bold", "italic", "strike"],
+    ["hr", "quote"],
+    ["ul", "ol", "task", "indent", "outdent"],
+    ["table", "link"],
+    ["code", "codeblock"],
+];
+
+interface ToastViewerProps {
+    readonly initialValue: string;
+    readonly usageStatistics: boolean;
+}
+
+const ToastViewer: React.FC<ToastViewerProps> = p => {
+    const elRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (elRef.current === null) return;
+
+        const viewer = new Viewer({
+            el: elRef.current,
+            initialValue: p.initialValue,
+            usageStatistics: p.usageStatistics,
+        });
+
+        return () => viewer.destroy();
+    }, [p.initialValue, p.usageStatistics]);
+
+    return <div ref={elRef} />;
+};
+
+interface ToastEditorProps {
+    readonly autofocus: boolean;
+    readonly height: string;
+    readonly hideModeSwitch: boolean;
+    readonly initialEditType: "markdown" | "wysiwyg";
+    readonly initialValue: string;
+    readonly onChange: (value: string) => void;
+    readonly toolbarItems: string[][];
+    readonly usageStatistics: boolean;
+}
+
+const ToastEditor: React.FC<ToastEditorProps> = p => {
+    const {
+        autofocus,
+        height,
+        hideModeSwitch,
+        initialEditType,
+        initialValue,
+        onChange,
+        toolbarItems,
+        usageStatistics,
+    } = p;
+    const elRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (elRef.current === null) return;
+
+        const editor = new Editor({
+            el: elRef.current,
+            autofocus,
+            height,
+            hideModeSwitch,
+            initialEditType,
+            initialValue,
+            toolbarItems,
+            usageStatistics,
+            events: {
+                change: () => onChange(editor.getMarkdown()),
+            },
+        });
+
+        return () => editor.destroy();
+    }, [autofocus, height, hideModeSwitch, initialEditType, initialValue, onChange, toolbarItems, usageStatistics]);
+
+    return <div ref={elRef} />;
+};
+
 const ArticleCellEditor: ProvideEditorComponent<ArticleCell> = p => {
     const [tempValue, setTempValue] = React.useState(p.value.data.markdown);
 
@@ -56,14 +134,14 @@ const ArticleCellEditor: ProvideEditorComponent<ArticleCell> = p => {
     if (p.value.readonly) {
         return (
             <Wrapper id="gdg-markdown-readonly" onKeyDown={onKeyDown} style={{ height: "75vh", padding: "35px" }}>
-                <Viewer initialValue={p.value.data.markdown} usageStatistics={false} />
+                <ToastViewer initialValue={p.value.data.markdown} usageStatistics={false} />
             </Wrapper>
         );
     }
 
     return (
         <Wrapper id="gdg-markdown-wysiwyg" onKeyDown={onKeyDown}>
-            <Editor
+            <ToastEditor
                 initialEditType="wysiwyg"
                 autofocus={true}
                 initialValue={p.value.data.markdown}
@@ -71,13 +149,7 @@ const ArticleCellEditor: ProvideEditorComponent<ArticleCell> = p => {
                 onChange={setTempValue}
                 height="75vh"
                 usageStatistics={false}
-                toolbarItems={[
-                    ["heading", "bold", "italic", "strike"],
-                    ["hr", "quote"],
-                    ["ul", "ol", "task", "indent", "outdent"],
-                    ["table", "link"],
-                    ["code", "codeblock"],
-                ]}
+                toolbarItems={defaultToolbarItems}
             />
             <div className="gdg-footer">
                 <button className="gdg-close-button" onClick={onClose}>

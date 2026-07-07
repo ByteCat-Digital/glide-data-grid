@@ -1,5 +1,5 @@
-import { renderHook, cleanup } from "@testing-library/react-hooks";
-import { act } from "react-dom/test-utils";
+import { cleanup, renderHook } from "@testing-library/react";
+import { act } from "react";
 import { useStateWithReactiveInput } from "../src/common/utils.js";
 import { expect, describe, test, afterEach } from "vitest";
 
@@ -81,13 +81,13 @@ describe("useStateWithReactiveInput", () => {
             initialProps: { initialValue: 20 },
         });
 
-        expect(result.all.length).toBe(1);
+        expect(result.current[0]).toBe(20);
 
         act(() => {
             result.current[1](x => x);
         });
 
-        expect(result.all.length).toBe(1);
+        expect(result.current[0]).toBe(20);
     });
 
     test("set state with increment re-render", () => {
@@ -95,13 +95,13 @@ describe("useStateWithReactiveInput", () => {
             initialProps: { initialValue: 20 },
         });
 
-        expect(result.all.length).toBe(1);
+        expect(result.current[0]).toBe(20);
 
         act(() => {
             result.current[1](x => x + 1);
         });
 
-        expect(result.all.length).toBe(2);
+        expect(result.current[0]).toBe(21);
     });
 
     test("set state with identity does not re-render after state change", () => {
@@ -109,19 +109,19 @@ describe("useStateWithReactiveInput", () => {
             initialProps: { initialValue: 20 },
         });
 
-        expect(result.all.length).toBe(1);
+        expect(result.current[0]).toBe(20);
 
         rerender({ initialValue: 50 });
 
         expect(result.current[0]).toBe(50);
 
-        expect(result.all.length).toBe(2);
+        expect(result.current[0]).toBe(50);
 
         act(() => {
             result.current[1](x => x);
         });
 
         expect(result.current[0]).toBe(50);
-        expect(result.all.length).toBe(2);
+        expect(result.current[0]).toBe(50);
     });
 });

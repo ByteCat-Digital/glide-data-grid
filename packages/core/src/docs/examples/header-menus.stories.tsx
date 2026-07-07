@@ -1,6 +1,5 @@
 import { styled } from "@linaria/react";
 import React from "react";
-import { useLayer } from "react-laag";
 import { DataEditorAll as DataEditor } from "../../data-editor-all.js";
 import {
     BeautifulWrapper,
@@ -103,26 +102,22 @@ export const HeaderMenus: React.FC = () => {
         col: number;
         bounds: Rectangle;
     }>();
+    const menuRef = React.useRef<HTMLDivElement>(null);
 
     const isOpen = menu !== undefined;
 
-    const { layerProps, renderLayer } = useLayer({
-        isOpen,
-        auto: true,
-        placement: "bottom-end",
-        triggerOffset: 2,
-        onOutsideClick: () => setMenu(undefined),
-        trigger: {
-            getBounds: () => ({
-                left: menu?.bounds.x ?? 0,
-                top: menu?.bounds.y ?? 0,
-                width: menu?.bounds.width ?? 0,
-                height: menu?.bounds.height ?? 0,
-                right: (menu?.bounds.x ?? 0) + (menu?.bounds.width ?? 0),
-                bottom: (menu?.bounds.y ?? 0) + (menu?.bounds.height ?? 0),
-            }),
-        },
-    });
+    React.useEffect(() => {
+        if (!isOpen) return;
+
+        const closeOnOutsidePointerDown = (event: PointerEvent) => {
+            const target = event.target;
+            if (target instanceof Node && menuRef.current?.contains(target) === true) return;
+            setMenu(undefined);
+        };
+
+        window.addEventListener("pointerdown", closeOnOutsidePointerDown);
+        return () => window.removeEventListener("pointerdown", closeOnOutsidePointerDown);
+    }, [isOpen]);
 
     const onHeaderMenuClick = React.useCallback((col: number, bounds: Rectangle) => {
         setMenu({ col, bounds });
@@ -146,17 +141,23 @@ export const HeaderMenus: React.FC = () => {
                 onColumnResize={onColumnResize}
                 rows={1000}
             />
-            {isOpen &&
-                renderLayer(
-                    <SimpleMenu {...layerProps}>
-                        <div onClick={() => setMenu(undefined)}>These do nothing</div>
-                        <div onClick={() => setMenu(undefined)}>Add column right</div>
-                        <div onClick={() => setMenu(undefined)}>Add column left</div>
-                        <div className="danger" onClick={() => setMenu(undefined)}>
-                            Delete
-                        </div>
-                    </SimpleMenu>
-                )}
+            {menu !== undefined && (
+                <SimpleMenu
+                    ref={menuRef}
+                    style={{
+                        position: "fixed",
+                        left: menu.bounds.x + menu.bounds.width - 175,
+                        top: menu.bounds.y + menu.bounds.height + 2,
+                        zIndex: 10_000,
+                    }}>
+                    <div onClick={() => setMenu(undefined)}>These do nothing</div>
+                    <div onClick={() => setMenu(undefined)}>Add column right</div>
+                    <div onClick={() => setMenu(undefined)}>Add column left</div>
+                    <div className="danger" onClick={() => setMenu(undefined)}>
+                        Delete
+                    </div>
+                </SimpleMenu>
+            )}
         </>
     );
 };

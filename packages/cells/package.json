@@ -1,6 +1,6 @@
 {
     "name": "@bytecat/glide-data-grid-cells",
-    "version": "6.0.4-alpha25",
+    "version": "6.1.0",
     "description": "Extra cells for glide-data-grid",
     "sideEffects": [
         "**/*.css"
@@ -50,10 +50,9 @@
         "canvas"
     ],
     "dependencies": {
-        "@bytecat/glide-data-grid": "6.0.4-alpha25",
+        "@bytecat/glide-data-grid": "6.1.0",
         "@linaria/react": "^8.0.0",
         "@toast-ui/editor": "3.2.2",
-        "@toast-ui/react-editor": "3.2.3",
         "react-select": "^5.10.2"
     },
     "peerDependencies": {
@@ -63,7 +62,7 @@
     "devDependencies": {
         "@babel/cli": "^8.0.1",
         "@types/prosemirror-commands": "^1.3.0",
-        "eslint": "^10.6.0",
+        "eslint": "^9.39.4",
         "eslint-plugin-import": "^2.32.0",
         "eslint-plugin-react": "^7.37.5",
         "eslint-plugin-react-hooks": "^7.1.1",
