@@ -1,6 +1,6 @@
 {
     "name": "@bytecat/glide-data-grid-cells",
-    "version": "6.1.0",
+    "version": "6.1.1",
     "description": "Extra cells for glide-data-grid",
     "sideEffects": [
         "**/*.css"
@@ -50,7 +50,7 @@
         "canvas"
     ],
     "dependencies": {
-        "@bytecat/glide-data-grid": "6.1.0",
+        "@bytecat/glide-data-grid": "6.1.1",
         "@linaria/react": "^8.1.1",
         "@toast-ui/editor": "3.2.2",
         "react-select": "^5.10.2"
