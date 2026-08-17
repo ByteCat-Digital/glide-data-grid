@@ -1,5 +1,5 @@
 import * as React from "react";
-import { render, fireEvent, screen, cleanup } from "@testing-library/react";
+import { render, fireEvent, screen, cleanup, createEvent } from "@testing-library/react";
 import DataGrid, { type DataGridProps, type DataGridRef } from "../src/internal/data-grid/data-grid.js";
 import { CompactSelection, GridCellKind } from "../src/internal/data-grid/data-grid-types.js";
 import { getDefaultTheme } from "../src/index.js";
@@ -161,6 +161,23 @@ describe("data-grid", () => {
                 kind: "cell",
             })
         );
+    });
+
+    test("Does not cancel drags that start outside the grid", () => {
+        // The dragstart listener lives on the window; cancelling a foreign
+        // drag would break drag-and-drop for the rest of the page.
+        render(<DataGrid {...basicProps} />);
+
+        const foreign = document.createElement("div");
+        foreign.setAttribute("draggable", "true");
+        document.body.append(foreign);
+        try {
+            const ev = createEvent.dragStart(foreign);
+            fireEvent(foreign, ev);
+            expect(ev.defaultPrevented).toBe(false);
+        } finally {
+            foreign.remove();
+        }
     });
 
     test("OOB mouse down", () => {
