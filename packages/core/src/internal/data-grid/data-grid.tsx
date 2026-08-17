@@ -1458,12 +1458,13 @@ const DataGrid: React.ForwardRefRenderFunction<DataGridRef, DataGridProps> = (p,
         (event: DragEvent) => {
             const canvas = ref.current;
             const eventTarget = eventTargetRef?.current;
-            if (
-                canvas === null ||
-                (event.target !== canvas && event.target !== eventTarget) ||
-                isDraggable === false ||
-                isResizing
-            ) {
+            if (canvas === null || (event.target !== canvas && event.target !== eventTarget)) {
+                // A drag that did not start on this grid is not ours to manage.
+                // This listener is attached to the window, so cancelling here
+                // would break drag-and-drop for the rest of the page.
+                return;
+            }
+            if (isDraggable === false || isResizing) {
                 event.preventDefault();
                 return;
             }
