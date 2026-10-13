@@ -51,7 +51,7 @@
     ],
     "dependencies": {
         "@bytecat/glide-data-grid": "6.1.1",
-        "@linaria/react": "^8.1.1",
+        "@linaria/react": "^8.2.0",
         "@toast-ui/editor": "3.2.2",
         "react-select": "^5.10.2"
     },
