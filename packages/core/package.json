@@ -57,7 +57,7 @@
     },
     "homepage": "https://bytecat.ai",
     "dependencies": {
-        "@linaria/react": "^8.1.1",
+        "@linaria/react": "^8.2.0",
         "canvas-hypertxt": "^1.0.3",
         "react-number-format": "^5.4.5"
     },
@@ -72,7 +72,7 @@
         "@babel/cli": "^8.0.4",
         "@glideapps/ts-helper": "6.0.1",
         "@skypack/package-check": "^0.2.2",
-        "@vitest/coverage-v8": "^4.1.10",
+        "@vitest/coverage-v8": "^4.1.11",
         "eslint": "^9.39.5",
         "react-resize-detector": "^12.3.0",
         "tsc-esm-fix": "^3.1.2",
